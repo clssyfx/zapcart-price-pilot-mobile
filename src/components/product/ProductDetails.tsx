@@ -1,5 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Check } from "lucide-react";
 
 interface Specification {
   name: string;
