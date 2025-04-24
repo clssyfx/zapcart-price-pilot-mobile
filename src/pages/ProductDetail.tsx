@@ -1,13 +1,11 @@
-
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ShoppingCart, Check, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MobileNavigation } from "@/components/mobile-navigation";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
-// Mock data (in a real app, this would come from an API)
 const products = {
   1: {
     id: 1,
@@ -65,11 +63,11 @@ const products = {
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);
   
-  // Retrieve product based on ID (in a real app, we'd fetch this from API)
   const productId = parseInt(id || "1");
   const product = products[productId as keyof typeof products] || products[1];
   
@@ -79,10 +77,17 @@ const ProductDetail = () => {
       description: `${product.name} (${quantity}) added to your cart`,
     });
   };
+
+  const handleBuyNow = () => {
+    toast({
+      title: "Processing",
+      description: "Redirecting to checkout...",
+    });
+    navigate("/checkout");
+  };
   
   return (
     <div className="min-h-screen pb-20 bg-gray-50">
-      {/* Product Image Header */}
       <div className="relative h-72 bg-gray-200">
         <img
           src={product.image}
@@ -102,7 +107,6 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Product Details */}
       <div className="bg-white rounded-t-3xl -mt-8 px-4 pt-5 pb-6 shadow-lg z-10 relative">
         <div className="flex justify-between items-start">
           <div>
@@ -117,7 +121,6 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Rating */}
         <div className="flex items-center mt-2">
           <div className="flex items-center">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -140,7 +143,6 @@ const ProductDetail = () => {
           </span>
         </div>
 
-        {/* Colors */}
         {product.colors && product.colors.length > 0 && (
           <div className="mt-4">
             <p className="text-sm font-medium text-gray-700 mb-2">Color</p>
@@ -162,7 +164,6 @@ const ProductDetail = () => {
           </div>
         )}
 
-        {/* Quantity */}
         <div className="mt-4">
           <p className="text-sm font-medium text-gray-700 mb-2">Quantity</p>
           <div className="flex items-center space-x-4">
@@ -183,7 +184,6 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Product tabs */}
         <div className="mt-6">
           <Tabs defaultValue="description">
             <TabsList className="grid w-full grid-cols-3">
@@ -245,26 +245,25 @@ const ProductDetail = () => {
           </Tabs>
         </div>
 
-        {/* Add to Cart Button */}
         <div className="fixed bottom-16 inset-x-0 px-4 py-3 bg-white border-t border-gray-200 z-40">
           <div className="flex space-x-2">
             <Button
               variant="outline"
               className="w-1/4 border-zapcart-200 text-zapcart-600"
+              onClick={handleAddToCart}
             >
               <ShoppingCart size={18} />
             </Button>
             <Button 
-              onClick={handleAddToCart}
+              onClick={handleBuyNow}
               className="w-3/4 bg-zapcart-500 hover:bg-zapcart-600 text-white"
             >
-              Add to Cart
+              Buy Now
             </Button>
           </div>
         </div>
       </div>
       
-      {/* Bottom Navigation */}
       <MobileNavigation />
     </div>
   );

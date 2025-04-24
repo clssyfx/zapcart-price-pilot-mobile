@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Trash2, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileNavigation } from "@/components/mobile-navigation";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock cart data
 const initialCartItems = [
